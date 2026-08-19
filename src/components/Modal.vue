@@ -1,0 +1,140 @@
+<script setup>
+import iconoCerrarModal from '../assets/img/cerrar.svg'
+const emit = defineEmits(['cerrar-modal']);
+const props = defineProps({
+    modal: {
+        type: Object,
+        required: true
+    }
+});
+</script>
+
+<template>
+    <div class="modal" :class="{ animar: modal.animar }">
+        <div class="contenedor">
+            <div class="cerrar-modal">
+                <img :src="iconoCerrarModal" alt="Icono cerrar modal" @click="$emit('cerrar-modal')">
+            </div>
+            <form class="formulario">
+                <legend>Añadir Gasto</legend>
+                <div class="campo">
+                    <label for="nombre">Nombre de Gasto:</label>
+                    <input type="text" id="nombre" placeholder="Añade el Nombre del Gasto">
+                </div>
+
+                <div class="campo">
+                    <label for="cantidad">Cantidad:</label>
+                    <input type="number" id="cantidad" placeholder="Añade la Cantidad, ej: 300">
+                </div>
+
+                <div class="campo">
+                    <label for="categoria">Categoria:</label>
+                    <select name="categoria" id="categoria">
+                        <option value="">-- Seleccione --</option>
+                        <option value="ahorro">Ahorro</option>
+                        <option value="comida">Comida</option>
+                        <option value="casa">Casa</option>
+                        <option value="gasto">Gasto</option>
+                        <option value="ocio">Ocio</option>
+                        <option value="salud">Salud</option>
+                        <option value="suscripciones">Suscripciones</option>
+                    </select>
+                </div>
+
+                <input type="submit" value="Añadir Gasto">
+            </form>
+        </div>
+    </div>
+</template>
+
+<style lang="scss">
+.modal {
+    position: absolute;
+    z-index: 100;
+    inset: 0;
+    background-color: rgba($negro, 0.5);
+
+    opacity: 0;
+    transition: opacity 300ms ease-in;
+
+    &.animar {
+        opacity: 1;
+    }
+
+    .contenedor {
+        @include m.contenedor;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: $blanco;
+        border-radius: 1rem;
+        padding: 5rem;
+    }
+
+    .cerrar-modal {
+        position: absolute;
+        top: 3rem;
+        right: 3rem;
+        background-color: $negro;
+        border-radius: 50%;
+        width: 4rem;
+        height: 4rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            width: 3rem;
+            cursor: pointer;
+            transition: transform 300ms ease;
+
+            &:hover {
+                transform: scale(0.8);
+            }
+        }
+    }
+
+    .formulario {
+        legend {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            color: $negro;
+            margin-bottom: 4rem;
+        }
+
+        .campo {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        label {
+            font-size: 2.4rem;
+            color: $negro;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid $gris;
+            font-size: 2.2rem;
+        }
+
+        input[type="submit"] {
+            background-color: $azul;
+            color: $blanco;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 300ms ease;
+
+            &:hover {
+                background-color: darken($azul, 10%);
+            }
+        }
+    }
+}
+</style>
