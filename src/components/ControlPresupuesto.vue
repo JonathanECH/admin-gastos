@@ -1,7 +1,12 @@
 <script setup>
 import imagen from '../assets/img/grafico.jpg'
+import { formatearCantidad } from '../helpers';
 const props = defineProps({
     presupuesto: {
+        type: Number,
+        required: true
+    },
+    disponible: {
         type: Number,
         required: true
     }
@@ -14,9 +19,9 @@ const props = defineProps({
         </div>
 
         <div class="contenedor-presupuesto">
-            <p><span>Presupuesto:</span> ${{ presupuesto }}</p>
-            <p><span>Disponible:</span> ${{ presupuesto }}</p>
-            <p><span>Gastado:</span> ${{ presupuesto }}</p>
+            <p><span>Presupuesto:</span> {{formatearCantidad(presupuesto) }}</p>
+            <p><span>Disponible:</span> {{formatearCantidad(disponible) }}</p>
+            <p><span>Gastado:</span> {{formatearCantidad(presupuesto) }}</p>
             <div class="reset-app">
                 <button type="reset">Resetear App</button>
             </div>
@@ -36,14 +41,16 @@ const props = defineProps({
     }
 
     .contenedor-presupuesto {
+        text-align: center;
         @include m.tablet {
             display: flex;
             flex-direction: column;
+            text-align: left;
         }
 
         p {
-            font-size: 2rem;
-            color: $gris;
+            font-size: 2.4rem;
+            color: $gris-oscuro;
             margin: 1.3rem 0;
 
             span {
@@ -69,7 +76,8 @@ const props = defineProps({
 
     button {
         font-weight: 800;
-        font-size: 1.8rem;
+        font-size: 2.2rem;
+        text-transform: uppercase;
         width: 100%;
         border: none;
         border-radius: 1rem;
