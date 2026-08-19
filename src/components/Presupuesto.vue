@@ -58,7 +58,8 @@ const definirPresupuesto = () => {
 }
 
 .campo {
-    @include m.grid(1, 1, 2);
+    display: flex;
+    flex-direction: column;
 
     label {
         cursor: pointer;
