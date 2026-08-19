@@ -13,24 +13,24 @@
 </template>
 
 <style lang="scss" scoped>
+@use 'sass:color';
 .presupuesto {
     width: 100%;
 
     input[type=submit] {
         background-color: $azul;
         width: 100%;
-        font-weight: bold;
+        font-weight: 900;
         font-size: 2.2rem;
         padding: 1rem;
-        margin-top: 2rem;
         border: none;
         border-radius: 1rem;
         color: $blanco;
         cursor: pointer;
-        transition: color 5ms ease-in-out;
+        transition: background 300ms ease;
 
         &:hover {
-            background-color: darken($azul, 5%);
+            background-color: color.scale($azul, $lightness: -10%);
         }
     }
 }
@@ -40,9 +40,11 @@
 
     label {
         cursor: pointer;
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-weight: bold;
-        margin-bottom: 1rem;
+        text-align: center;
+        color: $azul;
+        margin-bottom: 2rem;
     }
 
     input {
@@ -52,7 +54,7 @@
         border-radius: 1.2rem;
         background-color: $gris-claro;
         padding: 0.8rem;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
     }
 }
 </style>

@@ -6,13 +6,13 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src/assets/scss', import.meta.url))
     }
   },
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/assets/scss/app.scss" as *; @use "@/assets/scss/base/mixins" as m;`
+        additionalData: `@use "@/app.scss" as *; @use "@/base/mixins" as m;`
       }
     }
   }
