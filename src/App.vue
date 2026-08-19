@@ -41,19 +41,17 @@ h2 {
 
 header {
   background-color: $azul;
-}
 
-header h1 {
-  padding: 3rem 0;
-  margin: 0;
-  color: $blanco;
-  text-align: center;
+  h1 {
+    padding: 3rem 0;
+    margin: 0;
+    color: $blanco;
+    text-align: center;
+  }
 }
 
 .contenedor {
-  width: 90%;
-  max-width: 80rem;
-  margin: 0 auto
+  @include m.contenedor;
 }
 
 .contenedor-header {

@@ -1,5 +1,5 @@
 <script>
-import App from '../App.vue';
+
 </script>
 <template>
     <form class="presupuesto">
@@ -18,7 +18,11 @@ import App from '../App.vue';
 
     input[type=submit] {
         background-color: $azul;
+        width: 100%;
+        font-weight: bold;
+        font-size: 2.2rem;
         padding: 1rem;
+        margin-top: 2rem;
         border: none;
         border-radius: 1rem;
         color: $blanco;
@@ -26,22 +30,27 @@ import App from '../App.vue';
         transition: color 5ms ease-in-out;
 
         &:hover {
-            background-color: lighten($azul, 5%);
+            background-color: darken($azul, 5%);
         }
     }
 }
+
 .campo {
-    display: flex;
-    flex-direction: column;
+    @include m.grid(1,1,2);
 
     label {
         cursor: pointer;
+        font-size: 2.5rem;
+        font-weight: bold;
         margin-bottom: 1rem;
     }
 
     input {
-        border: solid 0.1rem;
+        border: none;
+        text-align: center;
+        font-size: 2rem;
         border-radius: 1.2rem;
+        background-color: $gris-claro;
         padding: 0.8rem;
         margin-bottom: 1rem;
     }
