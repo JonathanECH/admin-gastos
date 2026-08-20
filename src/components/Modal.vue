@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import Alerta from './Alerta.vue';
 import iconoCerrarModal from '../assets/img/cerrar.svg'
-const emit = defineEmits(['cerrar-modal','guardar-gasto', 'update:nombre', 'update:cantidad', 'update:categoria',]);
+const emit = defineEmits(['cerrar-modal', 'guardar-gasto', 'update:nombre', 'update:cantidad', 'update:categoria',]);
 const props = defineProps({
     modal: {
         type: Object,
@@ -19,20 +19,39 @@ const props = defineProps({
     categoria: {
         type: String,
         required: true
+    },
+    disponible: {
+        type: Number,
+        required: true
     }
 });
 const mensaje = ref('');
 const agregarGasto = () => {
     //Validar que no haya campos vacíos
-    const { nombre, cantidad, categoria } = props;
+    const { nombre, cantidad, categoria, disponible } = props;
     if ([nombre, cantidad, categoria].includes('')) {
         mensaje.value = 'Todos los campos son obligatorios';
+        setTimeout(() => {
+            mensaje.value = ''
+        }, 3000)
         return;
     }
 
-    //Validar que que la cantidad sea un número positivo
+    //Validar que la cantidad sea un número positivo
     if (isNaN(cantidad) || cantidad <= 0) {
         mensaje.value = 'La cantidad debe ser un número positivo';
+        setTimeout(() => {
+            mensaje.value = ''
+        }, 3000)
+        return;
+    }
+
+    //Validar que no se exceda del presupuesto
+    if (cantidad > disponible) {
+        mensaje.value = 'Estás excediendo el presupuesto';
+        setTimeout(() => {
+            mensaje.value = ''
+        }, 3000)
         return;
     }
     emit('guardar-gasto');
@@ -41,15 +60,14 @@ const agregarGasto = () => {
 </script>
 
 <template>
-    <div class="modal" :class="{ animar: modal.animar }"
-    @click.self="emit('cerrar-modal')">
+    <div class="modal" :class="{ animar: modal.animar }" @click.self="emit('cerrar-modal')">
         <div class="contenedor">
             <div class="cerrar-modal">
                 <img :src="iconoCerrarModal" alt="Icono cerrar modal" @click="emit('cerrar-modal')">
             </div>
             <form class="formulario" @submit.prevent="agregarGasto">
-                <Alerta v-if="mensaje">{{ mensaje }}</Alerta>
                 <legend>Añadir Gasto</legend>
+                <Alerta v-if="mensaje" class="alerta">{{ mensaje }}</Alerta>
                 <div class="campo">
                     <label for="nombre">Nombre de Gasto:</label>
                     <input type="text" id="nombre" placeholder="Añade el Nombre del Gasto" :value="nombre"
@@ -139,6 +157,10 @@ const agregarGasto = () => {
             margin-bottom: 3rem;
         }
 
+        .alerta {
+            margin-bottom: 1rem;
+        }
+
         .campo {
             display: grid;
             gap: 2rem;
@@ -159,7 +181,7 @@ const agregarGasto = () => {
             font-size: 2.2rem;
         }
 
-        select{
+        select {
             cursor: pointer;
         }
 

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { generarId } from './helpers';
 import Presupuesto from './components/Presupuesto.vue';
 import ControlPresupuesto from './components/ControlPresupuesto.vue';
@@ -8,6 +8,7 @@ import Gasto from './components/Gasto.vue';
 import iconoNuevoGasto from './assets/img/nuevo-gasto.svg'
 const presupuesto = ref(0);
 const disponible = ref(0);
+const gastado = ref(0);
 const modal = reactive({
   mostrar: false,
   animar: false
@@ -21,6 +22,16 @@ const gasto = reactive({
   fecha: Date.now()
 })
 const gastos = ref([]);//Para almacenar los gastos
+
+watch(gastos, () => {
+  const totalGastado = gastos.value.reduce((total, gasto) => total + gasto.cantidad, 0)
+  gastado.value = totalGastado;
+  disponible.value = presupuesto.value - gastado.value;
+
+},
+  {
+    deep: true
+  })
 
 //Para definir el presupuesto y el disponible
 const definirPresupuesto = cantidad => {
@@ -72,13 +83,14 @@ const guardarGasto = () => {
 </script>
 
 <template>
-  <div :class="{fijar: modal.mostrar}">
+  <div :class="{ fijar: modal.mostrar }">
     <header>
       <h1>Planificador De Gastos</h1>
       <div class="contenedor-header contenedor sombra">
         <Presupuesto v-if="presupuesto === 0" @definir-presupuesto="definirPresupuesto" />
         <!-- /Presupuesto -->
-        <ControlPresupuesto v-else :presupuesto="presupuesto" :disponible="disponible" @resetear-app="resetearApp" />
+        <ControlPresupuesto v-else :presupuesto="presupuesto" :disponible="disponible" @resetear-app="resetearApp"
+          :gastado="gastado" />
         <!-- /ControlPresupuesto -->
       </div>
     </header>
@@ -94,7 +106,7 @@ const guardarGasto = () => {
         <img :src="iconoNuevoGasto" alt="Icono nuevo gasto" @click="mostrarModal">
       </div>
 
-      <Modal v-if="modal.mostrar" @cerrar-modal="cerrarModal" @guardar-gasto="guardarGasto" :modal="modal"
+      <Modal v-if="modal.mostrar" @cerrar-modal="cerrarModal" @guardar-gasto="guardarGasto" :modal="modal" :disponible="disponible"
         v-model:nombre="gasto.nombre" v-model:cantidad="gasto.cantidad" v-model:categoria="gasto.categoria" />
       <!-- /Modal -->
     </main>
@@ -128,7 +140,7 @@ h2 {
   font-size: 3rem;
 }
 
-.fijar{
+.fijar {
   overflow: hidden;
   height: 100vh;
 }
@@ -180,10 +192,9 @@ header {
   }
 }
 
-.listado-gastos{
+.listado-gastos {
   margin-top: 10rem;
   margin-bottom: 2rem;
-  padding: 1rem 5rem;
 
   h2 {
     text-align: center;
