@@ -1,6 +1,7 @@
 <script setup>
 import imagen from '../assets/img/grafico.jpg'
 import { formatearCantidad } from '../helpers';
+const emit = defineEmits(['resetear-app'])
 const props = defineProps({
     presupuesto: {
         type: Number,
@@ -19,11 +20,11 @@ const props = defineProps({
         </div>
 
         <div class="contenedor-presupuesto">
-            <p><span>Presupuesto:</span> {{formatearCantidad(presupuesto) }}</p>
-            <p><span>Disponible:</span> {{formatearCantidad(disponible) }}</p>
-            <p><span>Gastado:</span> {{formatearCantidad(presupuesto) }}</p>
+            <p><span>Presupuesto:</span> {{ formatearCantidad(presupuesto) }}</p>
+            <p><span>Disponible:</span> {{ formatearCantidad(disponible) }}</p>
+            <p><span>Gastado:</span> {{formatearCantidad(0) }}</p>
             <div class="reset-app">
-                <button type="reset">Resetear App</button>
+                <button type="button" @click="emit('resetear-app')">Resetear App</button>
             </div>
         </div>
     </div>
@@ -42,6 +43,7 @@ const props = defineProps({
 
     .contenedor-presupuesto {
         text-align: center;
+
         @include m.tablet {
             display: flex;
             flex-direction: column;

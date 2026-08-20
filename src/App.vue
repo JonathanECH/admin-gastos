@@ -10,9 +10,30 @@ const modal = reactive({
   mostrar: false,
   animar: false
 })
+const gasto = reactive({
+  nombre: '',
+  cantidad: '',
+  categoria: '',
+  id: null,
+  fecha: Date.now()
+})
 const definirPresupuesto = cantidad => {
   presupuesto.value = cantidad
   disponible.value = cantidad
+}
+
+const resetearApp = () => {
+  presupuesto.value = 0
+  disponible.value = 0
+  Object.assign(gasto, {
+    nombre: '',
+    cantidad: '',
+    categoria: '',
+    id: null,
+    fecha: Date.now()
+  })
+  modal.mostrar = false
+  modal.animar = false
 }
 
 const mostrarModal = () => {
@@ -35,7 +56,8 @@ const cerrarModal = () => {
       <h1>Planificador De Gastos</h1>
       <div class="contenedor-header contenedor sombra">
         <Presupuesto v-if="presupuesto === 0" @definir-presupuesto="definirPresupuesto" />
-        <ControlPresupuesto v-else :presupuesto="presupuesto" :disponible="disponible" />
+        <ControlPresupuesto v-else :presupuesto="presupuesto" :disponible="disponible"
+        @resetear-app="resetearApp"/>
       </div>
     </header>
     <main v-if="presupuesto > 0">
@@ -44,8 +66,11 @@ const cerrarModal = () => {
         <img :src="iconoNuevoGasto" alt="Icono nuevo gasto" @click="mostrarModal">
       </div>
 
-      <Modal v-if="modal.mostrar" @cerrar-modal="cerrarModal" 
-      :modal="modal"/>
+      <Modal v-if="modal.mostrar" @cerrar-modal="cerrarModal" :modal="modal"
+      v-model:nombre="gasto.nombre"
+      v-model:cantidad="gasto.cantidad"
+      v-model:categoria="gasto.categoria"
+      />
     </main>
   </div>
 </template>
