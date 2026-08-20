@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import { generarId } from './helpers';
 import Presupuesto from './components/Presupuesto.vue';
 import ControlPresupuesto from './components/ControlPresupuesto.vue';
 import Modal from './components/Modal.vue';
@@ -10,6 +11,7 @@ const modal = reactive({
   mostrar: false,
   animar: false
 })
+//Para almacenar los datos del gasto
 const gasto = reactive({
   nombre: '',
   cantidad: '',
@@ -17,11 +19,15 @@ const gasto = reactive({
   id: null,
   fecha: Date.now()
 })
+const gastos = ref([]);//Para almacenar los gastos
+
+//Para definir el presupuesto y el disponible
 const definirPresupuesto = cantidad => {
   presupuesto.value = cantidad
   disponible.value = cantidad
 }
 
+//Para resetear la app
 const resetearApp = () => {
   presupuesto.value = 0
   disponible.value = 0
@@ -36,6 +42,7 @@ const resetearApp = () => {
   modal.animar = false
 }
 
+//Para mostrar y cerrar el modal
 const mostrarModal = () => {
   modal.mostrar = true
   setTimeout(() => {
@@ -48,6 +55,11 @@ const cerrarModal = () => {
     modal.mostrar = false
   }, 300);
 }
+
+//Guardar gasto
+const guardarGasto = () => {
+  gastos.value.push({ ...gasto, id: generarId()});
+}
 </script>
 
 <template>
@@ -56,22 +68,23 @@ const cerrarModal = () => {
       <h1>Planificador De Gastos</h1>
       <div class="contenedor-header contenedor sombra">
         <Presupuesto v-if="presupuesto === 0" @definir-presupuesto="definirPresupuesto" />
-        <ControlPresupuesto v-else :presupuesto="presupuesto" :disponible="disponible"
-        @resetear-app="resetearApp"/>
+        <!-- /Presupuesto -->
+        <ControlPresupuesto v-else :presupuesto="presupuesto" :disponible="disponible" @resetear-app="resetearApp" />
+        <!-- /ControlPresupuesto -->
       </div>
     </header>
+    <!-- /header -->
     <main v-if="presupuesto > 0">
 
       <div class="gasto-nuevo">
         <img :src="iconoNuevoGasto" alt="Icono nuevo gasto" @click="mostrarModal">
       </div>
 
-      <Modal v-if="modal.mostrar" @cerrar-modal="cerrarModal" :modal="modal"
-      v-model:nombre="gasto.nombre"
-      v-model:cantidad="gasto.cantidad"
-      v-model:categoria="gasto.categoria"
-      />
+      <Modal v-if="modal.mostrar" @cerrar-modal="cerrarModal" @guardar-gasto="guardarGasto" :modal="modal"
+        v-model:nombre="gasto.nombre" v-model:cantidad="gasto.cantidad" v-model:categoria="gasto.categoria" />
+        <!-- /Modal -->
     </main>
+    <!-- /main -->
   </div>
 </template>
 
