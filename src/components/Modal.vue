@@ -41,7 +41,8 @@ const agregarGasto = () => {
 </script>
 
 <template>
-    <div class="modal" :class="{ animar: modal.animar }">
+    <div class="modal" :class="{ animar: modal.animar }"
+    @click.self="emit('cerrar-modal')">
         <div class="contenedor">
             <div class="cerrar-modal">
                 <img :src="iconoCerrarModal" alt="Icono cerrar modal" @click="emit('cerrar-modal')">
@@ -69,7 +70,7 @@ const agregarGasto = () => {
                         <option value="ahorro">Ahorro</option>
                         <option value="comida">Comida</option>
                         <option value="casa">Casa</option>
-                        <option value="gasto">Gasto</option>
+                        <option value="gastos">Gastos</option>
                         <option value="ocio">Ocio</option>
                         <option value="salud">Salud</option>
                         <option value="suscripciones">Suscripciones</option>
@@ -88,7 +89,6 @@ const agregarGasto = () => {
     z-index: 100;
     inset: 0;
     background-color: rgba($negro, 0.5);
-
     opacity: 0;
     transition: opacity 300ms ease-in;
 
@@ -157,6 +157,10 @@ const agregarGasto = () => {
             border-radius: 1rem;
             border: 1px solid $gris;
             font-size: 2.2rem;
+        }
+
+        select{
+            cursor: pointer;
         }
 
         input[type="submit"] {
