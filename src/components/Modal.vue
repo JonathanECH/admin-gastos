@@ -119,12 +119,12 @@ const agregarGasto = () => {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use 'sass:color';
 
 .modal {
     position: absolute;
-    z-index: 100;
+    z-index: 50;
     inset: 0;
     background-color: rgba($negro, 0.5);
     opacity: 0;
@@ -147,24 +147,28 @@ const agregarGasto = () => {
 
     .cerrar-modal {
         position: absolute;
-        top: 3rem;
-        right: 3rem;
+        top: 1.8rem;
+        right: 1.8rem;
         background-color: $negro;
         border-radius: 50%;
-        width: 4rem;
-        height: 4rem;
+        width: 3.2rem;
+        height: 3.2rem;
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
+        transition: all 300ms ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+        &:hover {
+            background-color: $eliminar;
+            transform: scale(1.1) rotate(90deg);
+        }
 
         img {
-            width: 3rem;
+            width: 1.6rem;
+            height: 1.6rem;
             cursor: pointer;
-            transition: transform 300ms ease;
-
-            &:hover {
-                transform: scale(0.8);
-            }
         }
     }
 

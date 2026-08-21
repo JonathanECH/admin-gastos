@@ -4,6 +4,7 @@ import { generarId } from './helpers';
 import Presupuesto from './components/Presupuesto.vue';
 import ControlPresupuesto from './components/ControlPresupuesto.vue';
 import Modal from './components/Modal.vue';
+import ModalConfirmar from './components/ModalConfirmar.vue';
 import Gasto from './components/Gasto.vue';
 import Filtros from './components/Filtros.vue';
 import iconoNuevoGasto from './assets/img/nuevo-gasto.svg'
@@ -15,6 +16,33 @@ const modal = reactive({
   mostrar: false,
   animar: false
 })
+const modalConfirmar = reactive({
+  mostrar: false,
+  titulo: '',
+  detalles: '',
+  onConfirmar: null
+})
+
+const confirmarAccion = (titulo, detalles, accion) => {
+  modalConfirmar.titulo = titulo
+  modalConfirmar.detalles = detalles
+  modalConfirmar.onConfirmar = accion
+  modalConfirmar.mostrar = true
+}
+
+const cerrarModalConfirmar = () => {
+  modalConfirmar.mostrar = false
+  modalConfirmar.titulo = ''
+  modalConfirmar.detalles = ''
+  modalConfirmar.onConfirmar = null
+}
+
+const ejecutarConfirmacion = () => {
+  if (modalConfirmar.onConfirmar) {
+    modalConfirmar.onConfirmar()
+  }
+  cerrarModalConfirmar()
+}
 //Para almacenar los datos del gasto
 const gasto = reactive({
   nombre: '',
@@ -78,8 +106,14 @@ const definirPresupuesto = cantidad => {
 
 //Para resetear la app
 const resetearApp = () => {
-  presupuesto.value = 0
-  gastos.value = []
+  confirmarAccion(
+    '¿Deseas reiniciar la aplicación?',
+    'Se borrarán todos tus presupuestos y gastos. Esta acción no se puede deshacer.',
+    () => {
+      presupuesto.value = 0
+      gastos.value = []
+    }
+  )
 }
 
 //Para mostrar y cerrar el modal
@@ -117,12 +151,16 @@ const seleccionarGasto = id => {
 }
 //Eliminar gasto
 const eliminarGasto = () => {
-  if (gasto.id) {
-    gastos.value = gastos.value.filter(g => g.id !== gasto.id);
-
-  }
-  //Setear el gasto
-  cerrarModal();
+  confirmarAccion(
+    '¿Deseas eliminar este gasto?',
+    'El gasto seleccionado se borrará permanentemente.',
+    () => {
+      if (gasto.id) {
+        gastos.value = gastos.value.filter(g => g.id !== gasto.id);
+      }
+      cerrarModal();
+    }
+  )
 }
 
 //Filtro de los gastos
@@ -166,6 +204,8 @@ const gastosFiltrados = computed(() => {
         @eliminar-gasto="eliminarGasto" :modal="modal" :id="gasto.id" :disponible="disponible"
         v-model:nombre="gasto.nombre" v-model:cantidad="gasto.cantidad" v-model:categoria="gasto.categoria" />
       <!-- /Modal -->
+      <ModalConfirmar v-if="modalConfirmar.mostrar" :titulo="modalConfirmar.titulo" :detalles="modalConfirmar.detalles"
+        @cerrar-modal="cerrarModalConfirmar" @confirmar="ejecutarConfirmacion" />
     </main>
     <!-- /main -->
   </div>

@@ -20,7 +20,7 @@ const props = defineProps({
     }
 })
 const porcentaje = computed(() => {
-    return parseInt(((props.presupuesto - props.disponible) * props.presupuesto) / 100)
+    return parseInt(((props.presupuesto - props.disponible) / props.presupuesto) * 100)
 })
 </script>
 <template>
@@ -41,7 +41,7 @@ const porcentaje = computed(() => {
         </div>
     </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 @use 'sass:color';
 
 .dos-columnas {
