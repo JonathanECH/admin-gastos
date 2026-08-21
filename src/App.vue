@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, computed } from 'vue';
+import { ref, reactive, watch, computed, onMounted } from 'vue';
 import { generarId } from './helpers';
 import Presupuesto from './components/Presupuesto.vue';
 import ControlPresupuesto from './components/ControlPresupuesto.vue';
@@ -29,6 +29,7 @@ watch(gastos, () => {
   const totalGastado = gastos.value.reduce((total, gasto) => total + gasto.cantidad, 0)
   gastado.value = totalGastado;
   disponible.value = presupuesto.value - gastado.value;
+  localStorage.setItem('gastos', JSON.stringify(gastos.value))
 
 },
   {
@@ -42,6 +43,20 @@ watch(modal, () => {
   }
 }, {
   deep: true
+})
+
+watch(presupuesto, () => {
+  localStorage.setItem('presupuesto', presupuesto.value)
+})
+
+onMounted(() => {
+  const presupuestoStorage = Number(localStorage.getItem('presupuesto'))
+  const gastosStorage = JSON.parse(localStorage.getItem('gastos'))
+  if (presupuestoStorage) {
+    presupuesto.value = presupuestoStorage
+    disponible.value = presupuestoStorage
+  }
+  if (gastosStorage) gastos.value = gastosStorage
 })
 
 //Función para reiniciar el state de gasto
@@ -65,15 +80,10 @@ const definirPresupuesto = cantidad => {
 const resetearApp = () => {
   presupuesto.value = 0
   disponible.value = 0
-  Object.assign(gasto, {
-    nombre: '',
-    cantidad: '',
-    categoria: '',
-    id: null,
-    fecha: Date.now()
-  })
-  modal.mostrar = false
-  modal.animar = false
+  gastado.value = 0
+  gastos.value = []
+  resetearStateGasto();
+  localStorage.clear();
 }
 
 //Para mostrar y cerrar el modal
@@ -121,7 +131,7 @@ const eliminarGasto = () => {
 
 //Filtro de los gastos
 const gastosFiltrados = computed(() => {
-  if (filtro.value && filtro.value !== 'sinFiltro'){
+  if (filtro.value && filtro.value !== 'sinFiltro') {
     return gastos.value.filter(gasto => gasto.categoria === filtro.value)
   }
   console.log('Todos los gastos')
@@ -144,8 +154,10 @@ const gastosFiltrados = computed(() => {
     <!-- /header -->
     <main v-if="presupuesto > 0">
       <Filtros v-if="gastos.length > 0" v-model:filtro="filtro" />
+      <!-- /Filtros -->
+
       <div class="listado-gastos contenedor" :class="[gastos.length > 0 ? 'mt-5' : 'mt-10']">
-        <h2>{{ gastos.length > 0 ? 'Gastos' : 'No hay gastos' }}</h2>
+        <h2>{{ gastosFiltrados.length > 0 ? 'Gastos' : 'No hay gastos' }}</h2>
 
         <Gasto v-for="gasto in gastosFiltrados" :key="gasto.id" :gasto="gasto" @seleccionar-gasto="seleccionarGasto" />
         <!-- /Gasto -->

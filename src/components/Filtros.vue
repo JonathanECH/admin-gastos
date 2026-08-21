@@ -7,7 +7,7 @@ defineProps(['filtro']);
     <div class="filtros sombra contenedor">
         <form>
             <div class="campo">
-                <label for="filtro">Elige la categoria:</label>
+                <label for="filtro">Filtrar Gastos:</label>
                 <select name="filtro" id="filtro" :value="filtro"
                 @input="$emit('update:filtro', $event.target.value)">
                     <option value="" disabled>-- Usar Filtro --</option>
