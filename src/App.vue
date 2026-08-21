@@ -73,6 +73,15 @@ watch(modal, () => {
   deep: true
 })
 
+//Para fijar el body cuando el modal está abierto
+watch([() => modal.mostrar, () => modalConfirmar.mostrar], ([modalMostrar, confirmMostrar]) => {
+  if (modalMostrar || confirmMostrar) {
+    document.body.classList.add('fijar')
+  } else {
+    document.body.classList.remove('fijar')
+  }
+})
+
 watch(presupuesto, () => {
   localStorage.setItem('presupuesto', presupuesto.value)
 })
@@ -174,27 +183,27 @@ const gastosFiltrados = computed(() => {
 </script>
 
 <template>
-  <div :class="{ fijar: modal.mostrar }">
+  <div :class="{ fijar: modal.mostrar || modalConfirmar.mostrar }">
     <header>
       <h1>Planificador De Gastos</h1>
       <div class="contenedor-header contenedor sombra">
         <Presupuesto v-if="presupuesto === 0" @definir-presupuesto="definirPresupuesto" />
-        <!-- /Presupuesto -->
+        <!--?Presupuesto -->
         <ControlPresupuesto v-else :presupuesto="presupuesto" :disponible="disponible" @resetear-app="resetearApp"
           :gastado="gastado" />
-        <!-- /ControlPresupuesto -->
+        <!--?ControlPresupuesto -->
       </div>
     </header>
-    <!-- /header -->
+    <!--?header -->
     <main v-if="presupuesto > 0">
       <Filtros v-if="gastos.length > 0" v-model:filtro="filtro" />
-      <!-- /Filtros -->
+      <!--?Filtros -->
 
       <div class="listado-gastos contenedor" :class="[gastos.length > 0 ? 'mt-5' : 'mt-10']">
         <h2>{{ gastosFiltrados.length > 0 ? 'Gastos' : 'No hay gastos' }}</h2>
 
         <Gasto v-for="gasto in gastosFiltrados" :key="gasto.id" :gasto="gasto" @seleccionar-gasto="seleccionarGasto" />
-        <!-- /Gasto -->
+        <!--?Gasto -->
       </div>
       <div class="gasto-nuevo">
         <img :src="iconoNuevoGasto" alt="Icono nuevo gasto" @click="mostrarModal">
@@ -203,11 +212,12 @@ const gastosFiltrados = computed(() => {
       <Modal v-if="modal.mostrar" @cerrar-modal="cerrarModal" @guardar-gasto="guardarGasto"
         @eliminar-gasto="eliminarGasto" :modal="modal" :id="gasto.id" :disponible="disponible"
         v-model:nombre="gasto.nombre" v-model:cantidad="gasto.cantidad" v-model:categoria="gasto.categoria" />
-      <!-- /Modal -->
+      <!--?Modal -->
       <ModalConfirmar v-if="modalConfirmar.mostrar" :titulo="modalConfirmar.titulo" :detalles="modalConfirmar.detalles"
         @cerrar-modal="cerrarModalConfirmar" @confirmar="ejecutarConfirmacion" />
+      <!--?ModalConfirmar -->
     </main>
-    <!-- /main -->
+    <!--?main -->
   </div>
 </template>
 

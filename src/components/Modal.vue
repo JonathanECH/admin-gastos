@@ -83,6 +83,7 @@ const agregarGasto = () => {
             <form class="formulario" @submit.prevent="agregarGasto">
                 <legend>{{ id ? 'Guardar Cambios' : 'Añadir Gasto' }}</legend>
                 <Alerta v-if="mensaje" class="alerta">{{ mensaje }}</Alerta>
+                <!--?Alerta-->
                 <div class="campo">
                     <label for="nombre">Nombre de Gasto:</label>
                     <input type="text" id="nombre" placeholder="Añade el Nombre del Gasto" :value="nombre"
@@ -123,8 +124,8 @@ const agregarGasto = () => {
 @use 'sass:color';
 
 .modal {
-    position: absolute;
-    z-index: 50;
+    position: fixed;
+    z-index: 100;
     inset: 0;
     background-color: rgba($negro, 0.5);
     opacity: 0;

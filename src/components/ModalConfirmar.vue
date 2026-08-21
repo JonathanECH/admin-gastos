@@ -37,8 +37,8 @@ const props = defineProps({
 @use 'sass:color';
 
 .modal {
-    position: absolute;
-    z-index: 100;
+    position: fixed;
+    z-index: 110;
     inset: 0;
     background-color: rgba($negro, 0.5);
 
