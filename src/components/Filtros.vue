@@ -13,6 +13,7 @@ const menuAbierto = ref(false);
                 <label for="filtro">Filtrar Gastos:</label>
                 <div class="select-personalizado">
                     <select name="filtro" id="filtro" :value="filtro" @click="menuAbierto = !menuAbierto"
+                        @blur="menuAbierto = false"
                         @input="$emit('update:filtro', $event.target.value)">
                         <option value="" disabled>Usar Filtro </option>
                         <option value="sinFiltro">Sin filtro</option>

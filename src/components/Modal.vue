@@ -104,7 +104,7 @@ const agregarGasto = () => {
                     <label for="categoria">Categoria:</label>
                     <div class="select-personalizado">
                         <select name="categoria" id="categoria" :value="categoria" @click="menuAbierto = !menuAbierto"
-                            @input="emit('update:categoria', $event.target.value)">
+                            @blur="menuAbierto = false" @input="emit('update:categoria', $event.target.value)">
                             <option value="" disabled>-- Seleccionar --</option>
                             <option value="ahorro">Ahorro</option>
                             <option value="comida">Comida</option>
