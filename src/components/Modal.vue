@@ -29,8 +29,12 @@ const props = defineProps({
         required: true
     }
 });
+// Variables
 const cantidadOld = props.cantidad;
 const mensaje = ref('');
+const menuAbierto = ref(false);
+
+//Para agregar un gasto
 const agregarGasto = () => {
     //Validar que no haya campos vacíos
     const { nombre, cantidad, categoria, disponible, id } = props;
@@ -98,17 +102,20 @@ const agregarGasto = () => {
 
                 <div class="campo">
                     <label for="categoria">Categoria:</label>
-                    <select name="categoria" id="categoria" :value="categoria"
-                        @input="emit('update:categoria', $event.target.value)">
-                        <option value="" disabled>-- Seleccione --</option>
-                        <option value="ahorro">Ahorro</option>
-                        <option value="comida">Comida</option>
-                        <option value="casa">Casa</option>
-                        <option value="gastos">Gastos</option>
-                        <option value="ocio">Ocio</option>
-                        <option value="salud">Salud</option>
-                        <option value="suscripciones">Suscripciones</option>
-                    </select>
+                    <div class="select-personalizado">
+                        <select name="categoria" id="categoria" :value="categoria" @click="menuAbierto = !menuAbierto"
+                            @input="emit('update:categoria', $event.target.value)">
+                            <option value="" disabled>-- Seleccionar --</option>
+                            <option value="ahorro">Ahorro</option>
+                            <option value="comida">Comida</option>
+                            <option value="casa">Casa</option>
+                            <option value="gastos">Gastos</option>
+                            <option value="ocio">Ocio</option>
+                            <option value="salud">Salud</option>
+                            <option value="suscripciones">Suscripciones</option>
+                        </select>
+                        <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ rotar: menuAbierto }" />
+                    </div>
                 </div>
                 <div v-if="id" class="botones">
                     <button type="button" @click="emit('eliminar-gasto')" class="eliminar">Eliminar</button>
@@ -206,8 +213,29 @@ const agregarGasto = () => {
             font-size: 2.2rem;
         }
 
-        select {
-            cursor: pointer;
+        .select-personalizado {
+            position: relative;
+            overflow: hidden;
+
+            select {
+                cursor: pointer;
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
+
+            .fa-angle-down {
+                pointer-events: none;
+                position: absolute;
+                right: 2rem;
+                top: 50%;
+                transform: translateY(-50%);
+                transition: transform .3s ease;
+
+                &.rotar {
+                    transform: translateY(-50%) rotate(-180deg);
+                }
+            }
         }
 
         .botones {
