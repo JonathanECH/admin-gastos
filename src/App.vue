@@ -79,11 +79,7 @@ const definirPresupuesto = cantidad => {
 //Para resetear la app
 const resetearApp = () => {
   presupuesto.value = 0
-  disponible.value = 0
-  gastado.value = 0
   gastos.value = []
-  resetearStateGasto();
-  localStorage.clear();
 }
 
 //Para mostrar y cerrar el modal

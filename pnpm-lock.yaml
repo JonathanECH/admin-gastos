@@ -11,6 +11,9 @@ importers:
       vue:
         specifier: ^3.5.40
         version: 3.5.41
+      vue3-circle-progress:
+        specifier: ^1.0.7
+        version: 1.0.7(core-js@3.50.0)(vue@3.5.41)
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^6.0.8
@@ -260,6 +263,9 @@ packages:
     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
     engines: {node: '>= 20.19.0'}
 
+  core-js@3.50.0:
+    resolution: {integrity: sha512-BRWgOLKkFeCgRudR6zrs8p9XJZcE14grzKMMssoYrk6krtuEZ7MTKPIY5RzOnqsEKIR9kst7wNzphttraT+Yqw==}
+
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
@@ -460,6 +466,12 @@ packages:
       yaml:
         optional: true
 
+  vue3-circle-progress@1.0.7:
+    resolution: {integrity: sha512-Z916xKQhuEcaOvwIfCFUX9r/gPUNd40G2aJbROcRtotm5FE4dZPP4S4iDEISexE9XMF813swkdc5VzCdFxfE8g==}
+    peerDependencies:
+      core-js: ^3.9.0
+      vue: ^3.0.5
+
   vue@3.5.41:
     resolution: {integrity: sha512-2laE0p+aK+/AOPG/XL/WepOs/GlK755LJ1XECi9kDUrz1FKNw8rb2Xzlw9JS1rqEV55nb0ttsKxVlTCcd+R5cg==}
     peerDependencies:
@@ -652,6 +664,8 @@ snapshots:
     dependencies:
       readdirp: 5.1.1
 
+  core-js@3.50.0: {}
+
   csstype@3.2.3: {}
 
   detect-libc@2.1.2: {}
@@ -792,6 +806,11 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
       sass: 1.102.0
+
+  vue3-circle-progress@1.0.7(core-js@3.50.0)(vue@3.5.41):
+    dependencies:
+      core-js: 3.50.0
+      vue: 3.5.41
 
   vue@3.5.41:
     dependencies:
