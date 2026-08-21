@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import Alerta from './Alerta.vue';
 import iconoCerrarModal from '../assets/img/cerrar.svg'
-const emit = defineEmits(['cerrar-modal', 'guardar-gasto', 'update:nombre', 'update:cantidad', 'update:categoria',]);
+const emit = defineEmits(['cerrar-modal', 'guardar-gasto', 'eliminar-gasto', 'update:nombre', 'update:cantidad', 'update:categoria']);
 const props = defineProps({
     modal: {
         type: Object,
@@ -23,12 +23,17 @@ const props = defineProps({
     disponible: {
         type: Number,
         required: true
+    },
+    id: {
+        type: [String, null],
+        required: true
     }
 });
+const cantidadOld = props.cantidad;
 const mensaje = ref('');
 const agregarGasto = () => {
     //Validar que no haya campos vacíos
-    const { nombre, cantidad, categoria, disponible } = props;
+    const { nombre, cantidad, categoria, disponible, id } = props;
     if ([nombre, cantidad, categoria].includes('')) {
         mensaje.value = 'Todos los campos son obligatorios';
         setTimeout(() => {
@@ -46,13 +51,23 @@ const agregarGasto = () => {
         return;
     }
 
-    //Validar que no se exceda del presupuesto
-    if (cantidad > disponible) {
-        mensaje.value = 'Estás excediendo el presupuesto';
-        setTimeout(() => {
-            mensaje.value = ''
-        }, 3000)
-        return;
+    if (id) {
+        if (cantidad > cantidadOld + disponible) {
+            mensaje.value = 'Estás excediendo el presupuesto';
+            setTimeout(() => {
+                mensaje.value = ''
+            }, 3000)
+            return;
+        }
+    } else {
+        //Validar que no se exceda del presupuesto
+        if (cantidad > disponible) {
+            mensaje.value = 'Estás excediendo el presupuesto';
+            setTimeout(() => {
+                mensaje.value = ''
+            }, 3000)
+            return;
+        }
     }
     emit('guardar-gasto');
     emit('cerrar-modal');
@@ -66,7 +81,7 @@ const agregarGasto = () => {
                 <img :src="iconoCerrarModal" alt="Icono cerrar modal" @click="emit('cerrar-modal')">
             </div>
             <form class="formulario" @submit.prevent="agregarGasto">
-                <legend>Añadir Gasto</legend>
+                <legend>{{ id ? 'Guardar Cambios' : 'Añadir Gasto' }}</legend>
                 <Alerta v-if="mensaje" class="alerta">{{ mensaje }}</Alerta>
                 <div class="campo">
                     <label for="nombre">Nombre de Gasto:</label>
@@ -94,14 +109,19 @@ const agregarGasto = () => {
                         <option value="suscripciones">Suscripciones</option>
                     </select>
                 </div>
-
-                <input type="submit" value="Añadir Gasto">
+                <div v-if="id" class="botones">
+                    <button type="button" @click="emit('eliminar-gasto')" class="eliminar">Eliminar</button>
+                    <input type="submit" value="Guardar"></input>
+                </div>
+                <input v-else type="submit" value="Añadir Gasto">
             </form>
         </div>
     </div>
 </template>
 
 <style lang="scss">
+@use 'sass:color';
+
 .modal {
     position: absolute;
     z-index: 100;
@@ -152,9 +172,8 @@ const agregarGasto = () => {
         legend {
             font-size: 3rem;
             font-weight: 700;
-            text-align: center;
             color: $negro;
-            margin-bottom: 3rem;
+            margin: 0 auto 3rem auto;
         }
 
         .alerta {
@@ -173,6 +192,7 @@ const agregarGasto = () => {
         }
 
         input,
+        button,
         select {
             width: 100%;
             padding: 1rem;
@@ -185,7 +205,27 @@ const agregarGasto = () => {
             cursor: pointer;
         }
 
-        input[type="submit"] {
+        .botones {
+            display: flex;
+            gap: 2rem;
+
+            .eliminar {
+                background-color: $eliminar;
+                color: $blanco;
+                font-weight: 700;
+                cursor: pointer;
+                transition: background-color 300ms ease;
+
+                &:hover {
+                    background-color: color.scale($eliminar, $lightness: -10%);
+                }
+            }
+        }
+
+        input[type="submit"],
+        button[type="submit"],
+        button {
+            border: none;
             background-color: $azul;
             color: $blanco;
             font-weight: 700;
@@ -193,7 +233,7 @@ const agregarGasto = () => {
             transition: background-color 300ms ease;
 
             &:hover {
-                background-color: darken($azul, 10%);
+                background-color: color.scale($azul, $lightness: -10%);
             }
         }
     }
