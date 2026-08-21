@@ -99,7 +99,7 @@ const agregarGasto = () => {
                     <label for="categoria">Categoria:</label>
                     <select name="categoria" id="categoria" :value="categoria"
                         @input="emit('update:categoria', $event.target.value)">
-                        <option value="">-- Seleccione --</option>
+                        <option value="" disabled>-- Seleccione --</option>
                         <option value="ahorro">Ahorro</option>
                         <option value="comida">Comida</option>
                         <option value="casa">Casa</option>
